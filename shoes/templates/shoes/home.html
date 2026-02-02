@@ -1,0 +1,124 @@
+{% extends 'shoes/base.html' %}
+
+{% block content %}
+<style>
+    /* Hero Glow Effect */
+    .hero-container {
+        position: relative;
+        padding: 100px 0;
+        overflow: hidden;
+    }
+    .hero-bg-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
+        z-index: -1;
+        animation: breath 4s infinite ease-in-out;
+    }
+
+    @keyframes breath {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+        50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+    }
+
+    .elite-card {
+        background: var(--glass);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .elite-card:hover {
+        transform: translateY(-15px) scale(1.03);
+        border-color: var(--neon-blue);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 212, 255, 0.2);
+    }
+
+    .floating-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+        padding: 5px 12px;
+        border-radius: 50px;
+        border: 1px solid var(--neon-blue);
+        font-size: 0.7rem;
+        color: var(--neon-blue);
+        font-weight: 800;
+    }
+
+    .glitch-text:hover {
+        text-shadow: 2px 0 var(--neon-blue), -2px 0 #ff00c1;
+        cursor: default;
+    }
+</style>
+
+<div class="hero-container text-center">
+    <div class="hero-bg-glow"></div>
+    <h1 class="display-2 fw-black text-white glitch-text">ELITE<span class="text-neon">.EXE</span></h1>
+    <p class="text-white-50 letter-spacing-2 mb-4">ACCESSING_ULTIMATE_FOOTWEAR_DATABASE_v4.0</p>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'shop' %}" class="btn btn-place-order w-auto px-5">ENTER_VIRTUAL_STORE</a>
+        <a href="{% url 'order_history' %}" class="btn btn-outline-info rounded-pill px-4">MY_LOGS</a>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-end mb-5">
+        <div>
+            <h3 class="text-white fw-bold m-0">ACTIVE_SPECIMENS</h3>
+            <p class="text-neon small m-0">FEATURED_INVENTORY_SELECTION</p>
+        </div>
+        <a href="{% url 'shop' %}" class="text-white-50 small text-decoration-none hover-neon">VIEW_ALL_DATABASE -></a>
+    </div>
+
+    <div class="row g-4">
+        {% for shoe in featured_shoes %}
+        <div class="col-lg-4 col-md-6">
+            <div class="elite-card p-3">
+                <span class="floating-badge">VERIFIED</span>
+                <div class="text-center mb-3">
+                    <img src="{{ shoe.image.url }}" class="img-fluid rounded-4" style="height: 250px; object-fit: cover; width: 100%;">
+                </div>
+                <div class="ps-2">
+                    <p class="text-neon small mb-1">{{ shoe.brand.name }}</p>
+                    <h5 class="text-white fw-bold mb-3">{{ shoe.name }}</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-white h5 m-0">${{ shoe.price }}</span>
+                        <a href="{% url 'shoe_detail' shoe.id %}" class="btn btn-sm btn-outline-light rounded-pill px-3">DETAILS</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-white-50 small">DATABASE_OFFLINE: No items found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container py-5 border-top border-secondary">
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <h2 class="text-white fw-black">99.9%</h2>
+            <p class="text-neon small">UPTIME_RELIABILITY</p>
+        </div>
+        <div class="col-md-4">
+            <h2 class="text-white fw-black">24/7</h2>
+            <p class="text-neon small">ENCRYPTED_SUPPORT</p>
+        </div>
+        <div class="col-md-4">
+            <h2 class="text-white fw-black">0.02s</h2>
+            <p class="text-neon small">LATENCY_DISPATCH</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

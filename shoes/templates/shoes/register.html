@@ -1,0 +1,42 @@
+{% extends 'shoes/base.html' %}
+{% block title %}Join the Squad - Register{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="fw-bold mb-0">CREATE ACCOUNT</h3>
+                    <small>Join the elite sneaker community</small>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted small">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">REGISTER NOW</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light text-center py-3 border-0">
+                    <p class="mb-0">Already a member? <a href="{% url 'login' %}" class="text-primary fw-bold text-decoration-none">Login Here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Django forms ko Bootstrap look dene ke liye */
+    input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+</style>
+{% endblock %}

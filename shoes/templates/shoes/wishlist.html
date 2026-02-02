@@ -1,0 +1,149 @@
+{% extends 'shoes/base.html' %}
+
+{% block title %}Saved Archive | Elite Kicks{% endblock %}
+
+{% block content %}
+<style>
+    .wishlist-header {
+        border-left: 5px solid var(--neon-blue);
+        padding-left: 20px;
+        margin-bottom: 40px;
+    }
+
+    .wish-card {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 25px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: hidden;
+    }
+
+    .wish-card:hover {
+        transform: translateY(-15px);
+        border-color: var(--neon-blue);
+        box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+    }
+
+    .img-container {
+        position: relative;
+        overflow: hidden;
+        background: rgba(0,0,0,0.2);
+    }
+
+    .wish-img {
+        height: 250px;
+        object-fit: contain;
+        padding: 20px;
+        transition: 0.5s;
+    }
+
+    .wish-card:hover .wish-img {
+        transform: scale(1.1) rotate(3deg);
+    }
+
+    .btn-action {
+        border-radius: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+
+    .price-tag {
+        font-family: 'Syncopate', sans-serif;
+        color: var(--neon-blue);
+        font-weight: 800;
+    }
+
+    .discount-old {
+        text-decoration: line-through;
+        color: rgba(255,255,255,0.3);
+        font-size: 0.8rem;
+        margin-right: 10px;
+    }
+
+    .empty-state {
+        background: rgba(255, 255, 255, 0.02);
+        border: 2px dashed rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="wishlist-header animate__animated animate__fadeInDown">
+        <h1 class="fw-black text-white m-0">SAVED_<span class="text-neon">ARCHIVE</span></h1>
+        <p class="text-white-50 small tracking-widest">STORED SPECIMENS READY FOR ACQUISITION</p>
+    </div>
+    
+    {% if wishlist_items %}
+        <div class="row g-4">
+            {% for item in wishlist_items %}
+            <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|add:0.1 }}s">
+                <div class="wish-card h-100">
+                    <div class="img-container text-center">
+                        {% if item.shoe.image %}
+                            <img src="{{ item.shoe.image.url }}" class="wish-img img-fluid" alt="{{ item.shoe.name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/300x250?text=DATA_MISSING" class="wish-img img-fluid" alt="No Image">
+                        {% endif %}
+                        <div class="position-absolute top-0 end-0 p-3">
+                            <span class="badge bg-dark border border-info text-info rounded-pill">ID_{{ item.shoe.id }}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <small class="text-info text-uppercase fw-bold" style="font-size: 0.65rem;">{{ item.shoe.brand.name }}</small>
+                        <h5 class="text-white fw-bold mb-3">{{ item.shoe.name|upper }}</h5>
+                        
+                        <div class="mb-4">
+                            {% if item.shoe.discount_price %}
+                                <span class="discount-old">${{ item.shoe.price }}</span>
+                                <span class="price-tag fs-4">${{ item.shoe.discount_price }}</span>
+                            {% else %}
+                                <span class="price-tag fs-4">${{ item.shoe.price }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'shoe_detail' item.shoe.id %}" class="btn btn-outline-light btn-action py-3">
+                                <i class="fas fa-eye me-2"></i>INSPECT
+                            </a>
+                            
+                            <form method="post" action="{% url 'add_to_cart' item.shoe.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-neon btn-action w-100 py-3">
+                                    <i class="fas fa-shopping-cart me-2"></i>DEPLOY TO BAG
+                                </button>
+                            </form>
+
+                            <form method="post" action="{% url 'remove_from_wishlist' item.shoe.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link text-danger text-decoration-none small w-100 mt-2">
+                                    <i class="fas fa-trash-alt me-1"></i> WIPE_FROM_MEMORY
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state text-center py-5 animate__animated animate__zoomIn">
+            <div class="mb-4">
+                <i class="fas fa-heart-broken fa-4x text-white-50 opacity-25"></i>
+            </div>
+            <h3 class="text-white fw-bold">ARCHIVE_IS_EMPTY</h3>
+            <p class="text-white-50">No specimens have been bookmarked for retrieval yet.</p>
+            <a href="{% url 'shop' %}" class="btn btn-neon px-5 py-3 mt-3">
+                <i class="fas fa-search me-2"></i>SCAN_MARKETPLACE
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+
+
+{% endblock %}

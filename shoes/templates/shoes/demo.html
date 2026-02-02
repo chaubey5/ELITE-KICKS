@@ -1,0 +1,179 @@
+{% extends 'shoes/base.html' %}
+
+{% block title %}Design Vault - Elite Kicks{% endblock %}
+
+{% block content %}
+<style>
+    /* Design Demo Specifics */
+    .section-title {
+        font-family: 'Syncopate', sans-serif;
+        border-left: 4px solid var(--neon-blue);
+        padding-left: 15px;
+        margin-bottom: 30px;
+        color: #fff;
+    }
+
+    .demo-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 30px;
+        transition: 0.3s;
+    }
+
+    .color-swatch {
+        height: 120px;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Component Overrides to match Neon Theme */
+    .hero-demo {
+        background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+        border-radius: 30px;
+        padding: 80px 20px;
+        border: 1px solid var(--neon-blue);
+        box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .glass-input {
+        background: rgba(255,255,255,0.05) !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        color: white !important;
+        border-radius: 12px !important;
+    }
+
+    .glass-input:focus {
+        border-color: var(--neon-pink) !important;
+        box-shadow: 0 0 15px rgba(255, 0, 127, 0.2) !important;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="hero-demo text-center mb-5 animate__animated animate__fadeIn">
+        <h1 class="display-3 fw-800 text-white" style="font-family: 'Syncopate';">STYLE <span class="text-info">GUIDE</span></h1>
+        <p class="lead text-muted mb-4">The core components of the Elite Kicks design system.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <button class="btn btn-info rounded-pill px-4">PRIMARY ACTION</button>
+            <button class="btn btn-outline-light rounded-pill px-4">SECONDARY</button>
+        </div>
+    </div>
+
+    <h2 class="section-title">SYSTEM COLORS</h2>
+    <div class="row g-4 mb-5">
+        <div class="col-md-2 col-6">
+            <div class="color-swatch" style="background: #00d4ff; color: #000;">
+                Neon Blue <span>#00D4FF</span>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="color-swatch" style="background: #ff007f; color: #fff;">
+                Neon Pink <span>#FF007F</span>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="color-swatch" style="background: #111; color: #fff; border: 1px solid #333;">
+                Card Dark <span>#111111</span>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="color-swatch" style="background: #00ffa3; color: #000;">
+                Mint <span>#00FFA3</span>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="color-swatch" style="background: #ef4444; color: #fff;">
+                Danger <span>#EF4444</span>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="color-swatch" style="background: #6366f1; color: #fff;">
+                Indigo <span>#6366F1</span>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">BUTTONS</h2>
+    <div class="demo-card mb-5">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <h6 class="text-muted mb-3">ACTION STATES</h6>
+                <div class="d-flex flex-wrap gap-3">
+                    <button class="btn btn-grab px-4">GRAB NOW</button>
+                    <button class="btn btn-outline-info rounded-pill px-4">EXPLORE</button>
+                    <button class="btn btn-danger rounded-3"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-muted mb-3">SIZES</h6>
+                <div class="d-flex align-items-center flex-wrap gap-3">
+                    <button class="btn btn-info btn-sm">SMALL</button>
+                    <button class="btn btn-info">DEFAULT</button>
+                    <button class="btn btn-info btn-lg">LARGE PRO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">INPUT FIELDS</h2>
+    <div class="demo-card mb-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <label class="form-label">Active Field</label>
+                <input type="text" class="form-control glass-input" placeholder="Enter name...">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Selection</label>
+                <select class="form-select glass-input">
+                    <option>Standard Style</option>
+                    <option>Limited Edition</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Price Range</label>
+                <input type="range" class="form-range" id="customRange1">
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">MOTION & VFX</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="demo-card text-center hover-glow" style="cursor: pointer;">
+                <i class="fas fa-bolt fa-3x text-info mb-3 animate__animated animate__flash animate__infinite animate__slow"></i>
+                <h5>Infinite Flash</h5>
+                <p class="small text-muted">Use for 'New Drop' alerts</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="demo-card text-center" onclick="this.classList.add('animate__animated', 'animate__rubberBand')" onanimationend="this.classList.remove('animate__animated', 'animate__rubberBand')">
+                <i class="fas fa-hand-pointer fa-3x text-pink mb-3" style="color: var(--neon-pink);"></i>
+                <h5>Tap Effect</h5>
+                <p class="small text-muted">Click this card to pulse</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="demo-card text-center">
+                <div class="spinner-border text-info mb-3" role="status"></div>
+                <h5>Live Loader</h5>
+                <p class="small text-muted">Smooth async transitions</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 p-5 text-center" style="background: rgba(0, 212, 255, 0.05); border: 1px dashed var(--neon-blue); border-radius: 30px;">
+        <h3 class="fw-bold text-white mb-3">Ready to Deploy?</h3>
+        <p class="text-muted mb-4">All components are mobile-responsive and GPU-accelerated.</p>
+        <a href="{% url 'shop' %}" class="btn btn-grab px-5 py-3">BACK TO STOREFRONT</a>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+{% endblock %}

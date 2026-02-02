@@ -1,0 +1,34 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+<div class="container py-5 animate__animated animate__slideInUp">
+    <h1 class="neon-text fw-black mb-5 text-center">SYSTEM_DECODING (FAQ)</h1>
+    
+    <div class="accordion glass-card p-2" id="faqElite">
+        <div class="accordion-item bg-transparent border-0 border-bottom border-secondary">
+            <h2 class="accordion-header">
+                <button class="accordion-button bg-transparent text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
+                    > HOW_FAST_IS_THE_SHIPPING?
+                </button>
+            </h2>
+            <div id="q1" class="accordion-collapse collapse" data-bs-parent="#faqElite">
+                <div class="accordion-body text-white-50">
+                    Transmissions (delivery) usually take 48-72 cycles (hours).
+                </div>
+            </div>
+        </div>
+        
+        <div class="accordion-item bg-transparent border-0">
+            <h2 class="accordion-header">
+                <button class="accordion-button bg-transparent text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
+                    > REFUND_PROTOCOL_V1.0?
+                </button>
+            </h2>
+            <div id="q2" class="accordion-collapse collapse" data-bs-parent="#faqElite">
+                <div class="accordion-body text-white-50">
+                    Refunds are processed back to the original encrypted source within 7 days.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
