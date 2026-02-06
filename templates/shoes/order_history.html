@@ -1,0 +1,30 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+<div class="mb-5">
+    <h2 class="fw-black">MISSION_<span class="text-neon">LOGS</span></h2>
+    <p class="small-caps">Previous Acquisitions</p>
+</div>
+
+<div class="glass-card p-0 overflow-hidden">
+    <table class="table table-dark mb-0">
+        <thead class="small-caps text-neon">
+            <tr>
+                <th class="p-4 border-secondary">Order_ID</th>
+                <th class="p-4 border-secondary">Date_Stamp</th>
+                <th class="p-4 border-secondary">Credit_Total</th>
+                <th class="p-4 border-secondary">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td class="p-4 border-secondary">#{{ order.id }}</td>
+                <td class="p-4 border-secondary">{{ order.created_at|date:"d M Y" }}</td>
+                <td class="p-4 border-secondary">${{ order.total_amount }}</td>
+                <td class="p-4 border-secondary"><span class="badge bg-info">{{ order.status }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

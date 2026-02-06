@@ -1,0 +1,143 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+
+<div class="product-container">
+    <div class="product-grid">
+        
+        <div class="image-section">
+            <div class="main-card-glass">
+                <div class="brand-tag">{{ shoe.brand.name|upper }}</div>
+                <img src="{{ shoe.image.url }}" alt="{{ shoe.name }}" class="shoe-img-hero">
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-content-glass">
+                <h1 class="shoe-name-bold">{{ shoe.name|upper }}</h1>
+                <div class="price-tag-large"><span class="currency">$</span>{{ shoe.price }}</div>
+
+                <hr class="divider">
+
+                <form action="{% url 'add_to_cart' shoe.id %}" method="POST" id="vaultForm">
+                    {% csrf_token %}
+                    
+                    <div class="size-select-block">
+                        <h5 class="selection-label">SELECT <span class="neon-blue">UK SIZE</span></h5>
+                        <div class="size-options-grid">
+                            
+                            <label class="size-pill">
+                                <input type="radio" name="size" value="7" required>
+                                <div class="pill-design"><span class="size-val-bold">7</span></div>
+                            </label>
+
+                            <label class="size-pill">
+                                <input type="radio" name="size" value="8">
+                                <div class="pill-design"><span class="size-val-bold">8</span></div>
+                            </label>
+
+                            <label class="size-pill">
+                                <input type="radio" name="size" value="9" checked>
+                                <div class="pill-design"><span class="size-val-bold">9</span></div>
+                            </label>
+
+                            <label class="size-pill">
+                                <input type="radio" name="size" value="10">
+                                <div class="pill-design"><span class="size-val-bold">10</span></div>
+                            </label>
+
+                            <label class="size-pill">
+                                <input type="radio" name="size" value="11">
+                                <div class="pill-design"><span class="size-val-bold">11</span></div>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <div class="qty-section mt-30">
+                        <h5 class="selection-label">QUANTITY</h5>
+                        <div class="qty-input-box">
+                            <button type="button" class="qty-control" onclick="changeQty(-1)">-</button>
+                            <input type="number" name="quantity" id="shoeQty" value="1" min="1" readonly>
+                            <button type="button" class="qty-control" onclick="changeQty(1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="action-grid mt-40">
+                        <button type="submit" class="btn-add-vault">
+                            <i class="fas fa-shopping-bag"></i> ADD TO VAULT
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; }
+    .product-container { max-width: 1100px; margin: 50px auto; padding: 20px; }
+    .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    
+    /* # Card Design */
+    .main-card-glass, .info-content-glass { 
+        background: #0d0d0d; 
+        border: 2px solid #1a1a1a; 
+        border-radius: 20px; 
+        padding: 40px; 
+    }
+
+    /* # Size Box Design: Bold aur Dark */
+    .size-options-grid { display: flex; flex-wrap: wrap; gap: 15px; }
+    .size-pill input { display: none; } /* Original checkbox hide kar di */
+    
+    .pill-design { 
+        background: #000; 
+        border: 2px solid #333; 
+        width: 65px; height: 65px; 
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 12px; cursor: pointer; transition: 0.2s ease-in-out;
+    }
+    
+    /* # Size Numbers: Ekdum White aur Bold */
+    .size-val-bold { color: #ffffff; font-size: 1.4rem; font-weight: 900; }
+
+    /* # Active State: Click par kya hoga */
+    .size-pill input:checked + .pill-design {
+        background: #00d4ff; 
+        border-color: #00d4ff;
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+    .size-pill input:checked + .pill-design .size-val-bold { color: #000; }
+
+    /* # Price & Details */
+    .price-tag-large { font-size: 2.8rem; font-weight: 900; color: #00d4ff; margin: 15px 0; }
+    .shoe-name-bold { font-size: 3rem; font-weight: 900; line-height: 1; }
+    .brand-tag { background: #00d4ff; color: #000; padding: 5px 15px; border-radius: 50px; font-weight: 900; font-size: 12px; display: inline-block; margin-bottom: 15px; }
+
+    /* # Quantity Box */
+    .qty-input-box { display: flex; align-items: center; background: #000; border: 1px solid #222; width: fit-content; border-radius: 10px; overflow: hidden; }
+    .qty-control { background: none; border: none; color: #00d4ff; padding: 10px 20px; cursor: pointer; font-size: 20px; font-weight: bold; }
+    #shoeQty { background: none; border: none; color: white; width: 40px; text-align: center; font-weight: 900; font-size: 1.2rem; }
+
+    /* # Submit Button */
+    .btn-add-vault { 
+        width: 100%; background: #00d4ff; color: #000; border: none; 
+        padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1.1rem;
+        cursor: pointer; box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2);
+    }
+    
+    .neon-blue { color: #00d4ff; }
+    .mt-30 { margin-top: 30px; }
+    .mt-40 { margin-top: 40px; }
+</style>
+
+<script>
+    function changeQty(val) {
+        let input = document.getElementById('shoeQty');
+        let current = parseInt(input.value);
+        if (current + val >= 1) input.value = current + val;
+    }
+</script>
+
+{% endblock %}

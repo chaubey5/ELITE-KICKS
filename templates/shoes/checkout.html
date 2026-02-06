@@ -1,0 +1,150 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+
+<div class="checkout-container">
+    <h1 class="checkout-title">SECURE <span class="neon-blue">CHECKOUT</span></h1>
+
+    <div class="checkout-grid">
+        <div class="form-section glass-card">
+            <form action="{% url 'order_confirmation' %}" method="POST" id="payment-form">
+                {% csrf_token %}
+                
+                <input type="hidden" name="total_amount" value="{{ total_amount }}">
+
+                <h4 class="section-label">SHIPPING & CONTACT</h4>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <input type="text" name="name" placeholder="Bhai ka naam" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Contact Number <span class="required">*</span></label>
+                        <input type="tel" name="contact" placeholder="+91 XXXXX XXXXX" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input type="email" name="email" placeholder="bhai@example.com" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Shipping Address <span class="required">*</span></label>
+                    <textarea name="address" rows="3" placeholder="Ghar ka pata, City, Pincode" required></textarea>
+                </div>
+
+                <hr class="divider">
+
+                <h4 class="section-label">PAYMENT METHOD</h4>
+                <div class="payment-options">
+                    <label class="pay-method-card">
+                        <input type="radio" name="payment_method" value="COD" checked onclick="togglePaymentFields('none')">
+                        <div class="pay-box">
+                            <i class="fas fa-truck"></i>
+                            <span>COD</span>
+                        </div>
+                    </label>
+
+                    <label class="pay-method-card">
+                        <input type="radio" name="payment_method" value="UPI" onclick="togglePaymentFields('upi')">
+                        <div class="pay-box">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>UPI</span>
+                        </div>
+                    </label>
+
+                    <label class="pay-method-card">
+                        <input type="radio" name="payment_method" value="CARD" onclick="togglePaymentFields('card')">
+                        <div class="pay-box">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Card</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div id="upi-details-section" class="conditional-section" style="display:none;">
+                    <div class="payment-inner-box">
+                        <label>UPI ID <span class="required">*</span></label>
+                        <input type="text" name="upi_id" id="upi_input" placeholder="bhai@okaxis">
+                    </div>
+                </div>
+
+                <div id="card-details-section" class="conditional-section" style="display:none;">
+                    <div class="payment-inner-box">
+                        <div class="input-group">
+                            <label>Card Number <span class="required">*</span></label>
+                            <input type="text" name="card_num" id="card_input" placeholder="0000 0000 0000 0000" maxlength="16">
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Expiry</label>
+                                <input type="text" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="input-group">
+                                <label>CVV</label>
+                                <input type="password" placeholder="***" maxlength="3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-place-order">PLACE ORDER NOW</button>
+            </form>
+        </div>
+
+        <div class="summary-section glass-card">
+            <h4 class="section-label">ORDER SUMMARY</h4>
+            <div class="summary-list">
+                {% for item in cart_items %}
+                <div class="summary-item">
+                    <span>{{ item.shoe.name }} (x{{ item.quantity }})</span>
+                    <span>${{ item.total_price }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <hr class="divider">
+            <div class="total-row">
+                <span>TOTAL</span>
+                <span class="total-price">${{ total_amount }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root { --neon: #00d4ff; }
+    body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; }
+    .checkout-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    .checkout-title { font-weight: 900; margin-bottom: 30px; letter-spacing: 1px; }
+    .neon-blue { color: var(--neon); }
+    .checkout-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px; }
+    .glass-card { background: #0d0d0d; border: 1px solid #1a1a1a; padding: 30px; border-radius: 20px; }
+    .section-label { font-size: 11px; color: #555; font-weight: 800; border-bottom: 1px solid #222; padding-bottom: 10px; margin-bottom: 20px; }
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .input-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+    label { font-size: 13px; margin-bottom: 5px; color: #aaa; }
+    input, textarea { background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; color: white; outline: none; }
+    input:focus { border-color: var(--neon); }
+    .payment-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .pay-method-card input { display: none; }
+    .pay-box { background: #000; border: 1px solid #222; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; }
+    .pay-method-card input:checked + .pay-box { border-color: var(--neon); background: rgba(0, 212, 255, 0.05); }
+    .payment-inner-box { background: #050505; padding: 20px; border-radius: 15px; border: 1px solid #222; margin-top: 10px; }
+    .total-row { display: flex; justify-content: space-between; font-weight: 900; font-size: 1.4rem; color: var(--neon); margin-top: 15px; }
+    .btn-place-order { width: 100%; background: var(--neon); color: black; border: none; padding: 18px; border-radius: 12px; font-weight: 900; margin-top: 25px; cursor: pointer; }
+    .required { color: #ff4d4d; }
+    .divider { border: 0; border-top: 1px solid #222; margin: 20px 0; }
+</style>
+
+<script>
+    function togglePaymentFields(type) {
+        const upi = document.getElementById('upi-details-section');
+        const card = document.getElementById('card-details-section');
+        upi.style.display = (type === 'upi') ? 'block' : 'none';
+        card.style.display = (type === 'card') ? 'block' : 'none';
+        document.getElementById('upi_input').required = (type === 'upi');
+        document.getElementById('card_input').required = (type === 'card');
+    }
+</script>
+
+{% endblock %}

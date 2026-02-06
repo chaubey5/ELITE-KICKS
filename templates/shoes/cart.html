@@ -1,0 +1,136 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+
+<div class="cart-wrapper">
+    
+    <div class="cart-header">
+        <h2 class="cart-title">YOUR <span class="neon-text">VAULT</span></h2>
+        <p class="cart-subtitle">Items reserved for your collection</p>
+    </div>
+
+    <div class="cart-grid">
+        <div class="items-section">
+            {% if cart_items %}
+                {% for item in cart_items %}
+                <div class="cart-item-card glass-box animate-in">
+                    <div class="item-img-box">
+                        <img src="{{ item.shoe.image.url }}" alt="{{ item.shoe.name }}">
+                    </div>
+                    
+                    <div class="item-details">
+                        <h4 class="item-name">{{ item.shoe.name }}</h4>
+                        <p class="item-brand text-muted">{{ item.shoe.brand.name }}</p>
+                        <span class="size-badge">SIZE: {{ item.size|default:"N/A" }}</span>
+                    </div>
+
+                    <div class="item-controls">
+                        <div class="quantity-box">
+                            <a href="{% url 'update_cart' item.id 'decrement' %}" class="qty-btn">-</a>
+                            <span class="qty-num">{{ item.quantity }}</span>
+                            <a href="{% url 'update_cart' item.id 'increment' %}" class="qty-btn">+</a>
+                        </div>
+                        <h5 class="item-price neon-text">${{ item.get_total_item_price }}</h5>
+                    </div>
+
+                    <div class="remove-box">
+                        <a href="{% url 'remove_from_cart' item.id %}" class="delete-link">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state glass-box text-center">
+                    <i class="fas fa-shopping-basket fa-3x mb-3"></i>
+                    <h3>VAULT IS EMPTY</h3>
+                    <a href="{% url 'shop' %}" class="btn-neon-outline">START BROWSING</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="summary-section">
+            <div class="glass-box sticky-box">
+                <h4 class="section-title">CART TOTALS</h4>
+                
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>${{ total_amount }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span class="text-success">FREE</span>
+                </div>
+                
+                <div class="grand-total-box">
+                    <div class="total-row">
+                        <h5>GRAND TOTAL:</h5>
+                        <h4 class="neon-text">${{ total_amount }}</h4>
+                    </div>
+                </div>
+
+                <div class="cart-actions">
+                    <a href="{% url 'checkout' %}" class="btn-checkout">PROCEED TO CHECKOUT</a>
+                    <a href="{% url 'clear_cart' %}" class="btn-clear" onclick="return confirm('Clear entire vault?')">CLEAR VAULT</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* # Layout & Typography */
+    .cart-wrapper { max-width: 1200px; margin: 0 auto; padding: 50px 20px; color: white; }
+    .cart-header { text-align: center; margin-bottom: 40px; }
+    .cart-title { font-weight: 900; letter-spacing: 5px; font-size: 2.5rem; }
+    .neon-text { color: #00d4ff; text-shadow: 0 0 10px rgba(0, 212, 255, 0.3); }
+    .cart-subtitle { color: rgba(255,255,255,0.4); font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+
+    .cart-grid { display: grid; grid-template-columns: 1.8fr 1fr; gap: 30px; align-items: start; }
+
+    /* # Glass UI Cards */
+    .glass-box { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 25px; margin-bottom: 20px; }
+    .sticky-box { position: sticky; top: 100px; }
+
+    /* # Item Card Specifics */
+    .cart-item-card { display: flex; align-items: center; gap: 20px; transition: 0.3s; position: relative; }
+    .cart-item-card:hover { border-color: #00d4ff; transform: translateX(5px); }
+    
+    .item-img-box img { width: 100px; height: 100px; object-fit: cover; border-radius: 12px; border: 1px solid #333; }
+    
+    .item-details { flex: 2; }
+    .item-name { font-weight: 800; margin-bottom: 5px; }
+    .size-badge { background: #000; color: #00d4ff; padding: 4px 10px; border-radius: 5px; font-size: 11px; border: 1px solid #00d4ff; }
+
+    /* # Quantity & Price Controls */
+    .item-controls { flex: 1; text-align: center; }
+    .quantity-box { display: flex; align-items: center; justify-content: center; gap: 15px; background: #000; padding: 8px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #222; }
+    .qty-btn { color: #00d4ff; text-decoration: none; font-weight: bold; font-size: 18px; width: 25px; }
+    .qty-num { font-weight: bold; font-size: 16px; }
+    .item-price { font-weight: 900; margin: 0; }
+
+    /* # Delete Link */
+    .delete-link { color: #ff4d4d; font-size: 18px; transition: 0.3s; }
+    .delete-link:hover { color: white; text-shadow: 0 0 10px #ff4d4d; }
+
+    /* # Summary Styling */
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; color: rgba(255,255,255,0.7); }
+    .grand-total-box { border-top: 1px solid #333; padding-top: 20px; margin-top: 20px; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; }
+
+    /* # Buttons */
+    .btn-checkout { display: block; background: #00d4ff; color: black; text-align: center; padding: 18px; border-radius: 50px; font-weight: 900; text-decoration: none; letter-spacing: 1px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3); }
+    .btn-clear { display: block; text-align: center; color: #ff4d4d; text-decoration: none; font-size: 12px; font-weight: bold; }
+    .btn-neon-outline { display: inline-block; border: 1px solid #00d4ff; color: #00d4ff; padding: 10px 25px; border-radius: 50px; text-decoration: none; margin-top: 20px; }
+
+    /* # Animations */
+    .animate-in { animation: slideUp 0.5s ease forwards; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* # Responsive */
+    @media (max-width: 768px) {
+        .cart-grid { grid-template-columns: 1fr; }
+        .cart-item-card { flex-direction: column; text-align: center; }
+    }
+</style>
+
+{% endblock %}

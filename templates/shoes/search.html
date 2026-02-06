@@ -1,0 +1,24 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+<div class="mb-5">
+    <h2 class="fw-black">SEARCH_<span class="text-neon">RESULTS</span></h2>
+    <p class="small-caps">MATCHES FOUND FOR: "{{ query }}"</p>
+</div>
+
+<div class="row g-4">
+    {% for shoe in results %}
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center">
+            <img src="{{ shoe.image.url }}" class="img-fluid mb-3" style="height: 150px; object-fit: contain;">
+            <h6 class="fw-bold">{{ shoe.name }}</h6>
+            <p class="text-neon mb-3">${{ shoe.price }}</p>
+            <a href="{% url 'shoe_detail' shoe.id %}" class="btn btn-neon btn-sm w-100">VIEW_GEAR</a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <p class="small-caps">NO_MATCHING_DATA_FOUND</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+<div class="mb-5">
+    <h2 class="fw-black">ORDER_<span class="text-neon">#{{ order.id }}</span></h2>
+    <p class="small-caps">Deployment Status: <span class="text-neon">{{ order.status }}</span></p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="glass-card p-4">
+            <h5 class="fw-bold mb-4">MANIFEST_ITEMS</h5>
+            {% for item in order.items.all %}
+            <div class="d-flex align-items-center mb-3 p-3 border border-secondary rounded-4">
+                <img src="{{ item.shoe.image.url }}" style="width: 80px;" class="me-4">
+                <div>
+                    <h6 class="mb-0 fw-bold">{{ item.shoe.name }}</h6>
+                    <small class="text-white-50">QTY: {{ item.quantity }} | SIZE: {{ item.size }}</small>
+                </div>
+                <div class="ms-auto fw-bold text-neon">${{ item.price }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card p-4">
+            <h5 class="fw-bold mb-3">DESTINATION_COORDINATES</h5>
+            <p class="small text-white-50 mb-0">{{ order.address }}</p>
+            <p class="small text-white-50">{{ order.city }}, {{ order.zip_code }}</p>
+            <hr class="border-secondary">
+            <div class="d-flex justify-content-between fw-bold">
+                <span>TOTAL_CREDITS</span>
+                <span class="text-neon">${{ order.total_amount }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

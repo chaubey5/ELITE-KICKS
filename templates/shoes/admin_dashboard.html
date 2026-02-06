@@ -1,0 +1,161 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+
+<style>
+    /* Premium Styling */
+    .stat-card { border: none; border-radius: 15px; transition: all 0.3s ease; }
+    .stat-card:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important; }
+    
+    .bg-gradient-blue { background: linear-gradient(45deg, #4e73df, #224abe); }
+    .bg-gradient-green { background: linear-gradient(45deg, #1cc88a, #13855c); }
+    .bg-gradient-orange { background: linear-gradient(45deg, #f6c23e, #dda20a); }
+    .bg-gradient-red { background: linear-gradient(45deg, #e74a3b, #be2617); }
+    
+    .table-card { border-radius: 15px; border: none; box-shadow: 0 5px 25px rgba(0,0,0,0.07); margin-bottom: 30px; }
+    .badge-soft { padding: 8px 12px; border-radius: 8px; font-weight: 600; }
+    .bg-success-soft { background-color: #e8fadf; color: #28a745; }
+    .bg-danger-soft { background-color: #fceaea; color: #dc3545; }
+    
+    .customer-img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">Super Admin Dashboard</h2>
+            <p class="text-muted">Welcome back! Here's what's happening with your store today.</p>
+        </div>
+        <a href="{% url 'add_product_custom' %}" class="btn btn-dark px-4 py-2 shadow-sm fw-bold">
+            <i class="fas fa-plus me-2"></i>Add New Shoe
+        </a>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card stat-card bg-gradient-blue text-white p-3 shadow">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-white-50 text-uppercase fw-bold">Total Revenue</small>
+                        <h3 class="fw-bold mb-0">${{ total_revenue }}</h3>
+                    </div>
+                    <i class="fas fa-wallet fa-2x text-white-50"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card bg-gradient-green text-white p-3 shadow">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-white-50 text-uppercase fw-bold">Total Orders</small>
+                        <h3 class="fw-bold mb-0">{{ total_orders }}</h3>
+                    </div>
+                    <i class="fas fa-shopping-bag fa-2x text-white-50"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card bg-gradient-orange text-white p-3 shadow">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-white-50 text-uppercase fw-bold">Total Users</small>
+                        <h3 class="fw-bold mb-0">{{ total_users }}</h3>
+                    </div>
+                    <i class="fas fa-user-friends fa-2x text-white-50"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card bg-gradient-red text-white p-3 shadow">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-white-50 text-uppercase fw-bold">Total Products</small>
+                        <h3 class="fw-bold mb-0">{{ total_products }}</h3>
+                    </div>
+                    <i class="fas fa-boxes fa-2x text-white-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card table-card p-4">
+                <h5 class="fw-bold mb-4 text-dark"><i class="fas fa-history me-2 text-primary"></i>Recent Orders</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light text-muted small text-uppercase">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td class="fw-bold text-primary">#{{ order.id }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://ui-avatars.com/api/?name={{ order.user.username }}&background=random" class="customer-img">
+                                        <div>
+                                            <div class="fw-bold small">{{ order.user.username }}</div>
+                                            <div class="text-muted" style="font-size: 11px;">{{ order.user.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="fw-bold text-success">${{ order.total_amount }}</td>
+                                <td class="small text-muted">{{ order.created_at|date:"d M, Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center py-4 text-muted">No orders yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card table-card p-4">
+                <h5 class="fw-bold mb-4 text-dark"><i class="fas fa-tools me-2 text-warning"></i>Inventory Control</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light text-muted small text-uppercase">
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shoe in shoes %}
+                            <tr>
+                                <td class="fw-bold small">{{ shoe.name }}</td>
+                                <td>
+                                    <form action="{% url 'update_price' shoe.id %}" method="POST" class="d-flex" style="width: 100px;">
+                                        {% csrf_token %}
+                                        <input type="number" name="new_price" value="{{ shoe.price }}" class="form-control form-control-sm">
+                                        <button class="btn btn-sm btn-success ms-1"><i class="fas fa-check"></i></button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="{% url 'toggle_stock' shoe.id %}" class="text-decoration-none">
+                                        {% if shoe.is_available %}
+                                            <span class="badge bg-success-soft">In Stock</span>
+                                        {% else %}
+                                            <span class="badge bg-danger-soft">Out</span>
+                                        {% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

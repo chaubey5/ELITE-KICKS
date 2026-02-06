@@ -1,0 +1,60 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 border rounded">
+            <h4 class="m-0 fw-bold text-dark">Add New Product</h4>
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-dark btn-sm">
+                <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <div class="card p-4 border-0 shadow-sm">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Product Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. Nike Air Max" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Price ($)</label>
+                        <input type="number" name="price" class="form-control" placeholder="0.00" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Brand</label>
+                        <select name="brand" class="form-select">
+                            {% for brand in brands %}
+                            <option value="{{ brand.id }}">{{ brand.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Description</label>
+                    <textarea name="description" class="form-control" rows="4" placeholder="Enter product details..."></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Product Image</label>
+                    <input type="file" name="image" class="form-control" required>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-5">Save Product</button>
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-light border px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    body { background-color: #f8f9fa !important; }
+    .card { border-radius: 8px; }
+    .form-control, .form-select { border-radius: 4px; padding: 10px; }
+</style>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+<div class="row justify-content-center py-5">
+    <div class="col-md-4">
+        <div class="glass-card p-5 border-neon">
+            <h2 class="fw-black text-center mb-4">USER_AUTH</h2>
+            
+            {% if error %}
+            <p class="text-danger text-center small mb-3">{{ error }}</p>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="text-neon small fw-bold">ID_IDENTIFIER</label>
+                    <input type="text" name="username" class="form-control bg-dark border-secondary text-white" required>
+                </div>
+                <div class="mb-4">
+                    <label class="text-neon small fw-bold">ACCESS_KEY</label>
+                    <input type="password" name="password" class="form-control bg-dark border-secondary text-white" required>
+                </div>
+                <button type="submit" class="btn btn-neon w-100">INITIALIZE_LOGIN</button>
+            </form>
+            <p class="mt-4 text-center small">New user? <a href="{% url 'register' %}" class="text-neon">Create_Neural_ID</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+<div class="mb-5">
+    <h2 class="fw-black text-white">SAVED_<span class="text-neon">GEAR</span></h2>
+    <p class="text-white-50 small">MONITORED ITEMS IN YOUR WATCHLIST</p>
+</div>
+
+<div class="row g-4">
+    {% for item in wishlist_items %}
+    <div class="col-md-3">
+        <div class="glass-card text-center p-3">
+            <img src="{{ item.shoe.image.url }}" class="img-fluid mb-2" style="height: 120px; object-fit: contain;">
+            <h6 class="text-white fw-bold mb-1">{{ item.shoe.name }}</h6>
+            <p class="text-neon small">${{ item.shoe.price }}</p>
+            <div class="d-flex gap-2 mt-2">
+                <a href="{% url 'shoe_detail' item.shoe.id %}" class="btn btn-sm btn-outline-light w-100">VIEW</a>
+                <button class="btn btn-sm btn-neon"><i class="fas fa-shopping-cart"></i></button>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <h4 class="text-white-50">WATCHLIST_EMPTY</h4>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

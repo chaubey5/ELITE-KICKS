@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}MEN'S VAULT | ELITE KICKS{% endblock %}
+
+{% block content %}
+<style>
+    /* Neon Theme Custom Styling */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        border-radius: 20px;
+        padding: 25px;
+        transition: 0.4s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .glass-card:hover {
+        border-color: var(--neon-blue);
+        box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
+        transform: translateY(-8px);
+    }
+
+    .product-img {
+        width: 100%;
+        height: 180px;
+        object-fit: contain;
+        filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+    }
+
+    .neon-text-sm {
+        color: var(--neon-blue);
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    /* Pagination Styling */
+    .page-link-neon {
+        background: transparent !important;
+        border: 1px solid var(--neon-blue) !important;
+        color: var(--neon-blue) !important;
+        margin: 0 5px;
+        border-radius: 10px !important;
+        font-weight: bold;
+    }
+
+    .page-link-neon.active {
+        background: var(--neon-blue) !important;
+        color: #000 !important;
+    }
+
+    .page-link-neon:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    .sidebar-heading {
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.5);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-3 d-none d-lg-block">
+        <div class="glass-card">
+            <div>
+                <h6 class="sidebar-heading">Filter_Systems</h6>
+                <div class="mb-4">
+                    <p class="small mb-2 text-white">CATEGORY</p>
+                    <div class="form-check small"><input class="form-check-input" type="checkbox" id="c1"><label class="form-check-label" for="c1">Running</label></div>
+                    <div class="form-check small"><input class="form-check-input" type="checkbox" id="c2"><label class="form-check-label" for="c2">Lifestyle</label></div>
+                    <div class="form-check small"><input class="form-check-input" type="checkbox" id="c3"><label class="form-check-label" for="c3">Gym</label></div>
+                </div>
+                <div class="mb-4">
+                    <p class="small mb-2 text-white">PRICE_RANGE</p>
+                    <input type="range" class="form-range" id="priceRange">
+                    <div class="d-flex justify-content-between x-small"><span>$0</span><span>$500</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-black" style="letter-spacing: -1px;">MEN'S <span style="color: var(--neon-blue);">COLLECTION</span></h2>
+            <div class="badge border border-info text-info p-2" id="item-counter">ITEMS: 1-6 / 18</div>
+        </div>
+
+        <div class="row g-4" id="shoe-grid">
+            </div>
+
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><button class="page-link page-link-neon" id="prevBtn" onclick="changePage(-1)">PREV</button></li>
+                <li class="page-item"><button class="page-link page-link-neon active" id="pageIndicator">1</button></li>
+                <li class="page-item"><button class="page-link page-link-neon" id="nextBtn" onclick="changePage(1)">NEXT</button></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<script>
+    // 18 Shoes Database
+    const shoeData = [
+        { name: "VORTEX_RUNNER", price: 160, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
+        { name: "CYBER_STEP_01", price: 145, img: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400" },
+        { name: "NEON_MAX_PHASE", price: 190, img: "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=400" },
+        { name: "DESERT_OPS_MID", price: 130, img: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400" },
+        { name: "STEALTH_LEATHER", price: 210, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=400" },
+        { name: "OXYGEN_FLY", price: 95, img: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400" },
+        { name: "CORE_ELITE", price: 155, img: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400" },
+        { name: "GRAVITY_BASKET", price: 175, img: "https://images.unsplash.com/photo-1551107643-51330c6d2682?w=400" },
+        { name: "CHROME_LIFESTYLE", price: 120, img: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=400" },
+        { name: "NITRO_SPEED", price: 140, img: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=400" },
+        { name: "URBAN_EXPLORER", price: 110, img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400" },
+        { name: "ALPHA_PROJECT", price: 200, img: "https://images.unsplash.com/photo-1521093470119-a3acdc43374a?w=400" },
+        { name: "RETRO_WAVE_88", price: 85, img: "https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?w=400" },
+        { name: "TITAN_BOOT_V2", price: 250, img: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=400" },
+        { name: "GLOW_SNEAK", price: 135, img: "https://images.unsplash.com/photo-1533681018184-68bd1d8f39fe?w=400" },
+        { name: "PHANTOM_GRIP", price: 165, img: "https://images.unsplash.com/photo-1520316587275-5e4f06f35f16?w=400" },
+        { name: "X_CUSHION_FLOW", price: 105, img: "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=400" },
+        { name: "RAZOR_SPORT", price: 150, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" }
+    ];
+
+    let currentPage = 1;
+    const itemsPerPage = 6;
+
+    function renderShoes() {
+        const grid = document.getElementById('shoe-grid');
+        grid.innerHTML = "";
+        
+        const start = (currentPage - 1) * itemsPerPage;
+        const currentItems = shoeData.slice(start, start + itemsPerPage);
+
+        currentItems.forEach(shoe => {
+            grid.innerHTML += `
+                <div class="col-md-6 col-xl-4">
+                    <div class="glass-card">
+                        <img src="${shoe.img}" class="product-img mb-3">
+                        <div>
+                            <h6 class="text-white fw-bold mb-1">${shoe.name}</h6>
+                            <p class="neon-text-sm mb-3">$${shoe.price}</p>
+                            <button class="btn btn-neon w-100 btn-sm py-2">ADD_TO_CART</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Update UI
+        document.getElementById('pageIndicator').innerText = currentPage;
+        document.getElementById('prevBtn').disabled = (currentPage === 1);
+        document.getElementById('nextBtn').disabled = (currentPage === 3);
+        document.getElementById('item-counter').innerText = `ITEMS: ${start + 1}-${start + currentItems.length} / 18`;
+    }
+
+    function changePage(dir) {
+        currentPage += dir;
+        renderShoes();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // Initial Load
+    renderShoes();
+</script>
+{% endblock %}

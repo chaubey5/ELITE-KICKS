@@ -1,0 +1,23 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="glass-card p-5">
+            <h2 class="fw-black text-neon">CONTACT_COMMAND</h2>
+            <p class="small-caps mb-4">Send a transmission to support</p>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="small-caps text-white-50">Signal_Source (Email)</label>
+                    <input type="email" class="form-control bg-dark border-secondary text-white shadow-none">
+                </div>
+                <div class="mb-3">
+                    <label class="small-caps text-white-50">Transmission_Data</label>
+                    <textarea class="form-control bg-dark border-secondary text-white shadow-none" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-neon w-100 py-3">SEND_SIGNAL</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

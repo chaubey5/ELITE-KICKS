@@ -1,0 +1,119 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+
+<div class="about-wrapper">
+    <div class="about-hero text-center animate__animated animate__fadeIn">
+        <h1 class="main-title">PROJECT_<span class="cyan-text">OVERVIEW</span></h1>
+        <p class="about-sub">A full-stack premium e-commerce architecture built with Django & Modern UI.</p>
+    </div>
+
+    <div class="row g-4 mt-5">
+        <div class="col-md-4">
+            <div class="about-card tilt-card" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="glow"></div>
+                <div class="feat-icon"><i class="fas fa-database"></i></div>
+                <h3>Dynamic Backend</h3>
+                <p>Built with Django, managing a complex product database, cart logic, and user sessions seamlessly.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="about-card tilt-card" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="glow"></div>
+                <div class="feat-icon"><i class="fas fa-shopping-cart"></i></div>
+                <h3>Secure Checkout</h3>
+                <p>Integrated a multi-step checkout with UPI, Card, and COD support, including real-time form validation.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="about-card tilt-card" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="glow"></div>
+                <div class="feat-icon"><i class="fas fa-file-invoice"></i></div>
+                <h3>Digital Invoicing</h3>
+                <p>Automated generation of print-friendly order slips with random Order IDs and dynamic price fetching.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="tech-stack-section mt-100">
+        <h2 class="section-title text-center">TECHNICAL_<span class="cyan-text">CORE</span></h2>
+        <div class="tech-grid">
+            <div class="tech-pill">Python / Django</div>
+            <div class="tech-pill">JavaScript (ES6+)</div>
+            <div class="tech-pill">CSS3 (Cyberpunk UI)</div>
+            <div class="tech-pill">SQLite / PostgreSQL</div>
+            <div class="tech-pill">Responsive Design</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root { --cyan: #00d4ff; --dark: #080808; }
+    .about-wrapper { padding: 60px 20px; color: white; position: relative; z-index: 5; }
+    
+    .main-title { font-size: 4rem; font-weight: 900; letter-spacing: 2px; }
+    .cyan-text { color: var(--cyan); text-shadow: 0 0 15px rgba(0,212,255,0.4); }
+    .about-sub { color: #888; font-size: 1.1rem; margin-top: 10px; font-family: monospace; }
+
+    .mt-100 { margin-top: 100px; }
+    .section-title { font-size: 2rem; font-weight: 800; margin-bottom: 40px; }
+
+    /* Project Cards */
+    .about-card {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 40px;
+        border-radius: 20px;
+        height: 100%;
+        transition: 0.1s ease-out;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+    .feat-icon { font-size: 2.5rem; color: var(--cyan); margin-bottom: 20px; }
+    .about-card h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; }
+    .about-card p { color: #999; line-height: 1.6; font-size: 0.95rem; }
+
+    /* Tech Pills */
+    .tech-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+    .tech-pill {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid var(--cyan);
+        color: var(--cyan);
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    /* Interaction Glow */
+    .glow {
+        position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+        background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0,212,255,0.12) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) { .main-title { font-size: 2.5rem; } }
+</style>
+
+<script>
+    function tilt(e, card) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rotateX = (y - rect.height / 2) / 15;
+        const rotateY = (rect.width / 2 - x) / 15;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        card.style.setProperty('--x', `${x}px`);
+        card.style.setProperty('--y', `${y}px`);
+    }
+
+    function resetTilt(card) {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends 'shoes/base.html' %}
+{% block content %}
+
+<div class="cyber-container">
+    <div class="grid-overlay"></div>
+
+    <div class="hero-wrap animate__animated animate__fadeIn">
+        <div class="status-bar">
+            <span class="pulse-dot"></span> SYSTEM_ONLINE // WELCOME USER
+        </div>
+        
+        <h1 class="main-title">ELITE_<span class="neon-text">KICKS</span></h1>
+        <p class="hero-subtitle">Premium Sneakers. Secure Payments. Fast Delivery.</p>
+
+        <div class="action-btns mt-5">
+            <a href="{% url 'shop' %}" class="cyber-btn-fill">
+                ENTER THE VAULT
+            </a>
+            <a href="{% url 'about' %}" class="cyber-btn-outline ms-lg-3">
+                LEARN ABOUT PROJECT
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4 feature-grid">
+        <div class="col-md-4">
+            <div class="interactive-card" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <i class="fas fa-shipping-fast mb-3"></i>
+                    <h4>Fast Shipping</h4>
+                    <p>Get your favorite sneakers delivered to your home in 24 hours.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="interactive-card active-card" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <i class="fas fa-shield-alt mb-3"></i>
+                    <h4>Secure Pay</h4>
+                    <p>Every transaction is encrypted and 100% safe for you.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="interactive-card" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <i class="fas fa-check-double mb-3"></i>
+                    <h4>Authentic Gear</h4>
+                    <p>We only sell 100% original sneakers from top brands.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root { --neon: #00d4ff; --dark: #050505; }
+
+    .cyber-container {
+        position: relative;
+        min-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        overflow: hidden;
+    }
+
+    /* Grid Background Animation */
+    .grid-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 200%; height: 200%;
+        background-image: linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        transform: rotateX(60deg);
+        animation: moveGrid 20s linear infinite;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    @keyframes moveGrid {
+        from { transform: rotateX(60deg) translateY(0); }
+        to { transform: rotateX(60deg) translateY(-500px); }
+    }
+
+    /* Hero Styling */
+    .hero-wrap { position: relative; z-index: 10; text-align: center; }
+    .main-title { font-size: 5rem; font-weight: 900; letter-spacing: 5px; color: white; margin: 0; }
+    .neon-text { color: var(--neon); text-shadow: 0 0 20px var(--neon); }
+    .hero-subtitle { font-size: 1.2rem; color: #888; margin-top: 10px; letter-spacing: 1px; }
+
+    .status-bar {
+        font-size: 0.75rem; color: var(--neon); border: 1px solid var(--neon);
+        padding: 5px 15px; border-radius: 50px; display: inline-block; margin-bottom: 20px;
+        background: rgba(0,0,0,0.5);
+    }
+    .pulse-dot {
+        height: 8px; width: 8px; background: var(--neon); border-radius: 50%;
+        display: inline-block; margin-right: 8px; animation: pulse 1.5s infinite;
+    }
+
+    /* Buttons */
+    .cyber-btn-fill {
+        background: var(--neon); color: black; padding: 15px 35px;
+        font-weight: 800; text-decoration: none; border-radius: 5px;
+        display: inline-block; transition: 0.3s;
+    }
+    .cyber-btn-fill:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--neon); color: black; }
+
+    .cyber-btn-outline {
+        border: 2px solid var(--neon); color: var(--neon); padding: 13px 33px;
+        font-weight: 800; text-decoration: none; border-radius: 5px;
+        display: inline-block; transition: 0.3s;
+    }
+    .cyber-btn-outline:hover { background: rgba(0,212,255,0.1); color: white; }
+
+    /* Interactive Cards */
+    .feature-grid { position: relative; z-index: 10; width: 100%; max-width: 1100px; margin-top: 80px; }
+    .interactive-card {
+        background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255,255,255,0.1);
+        padding: 40px; border-radius: 20px; transition: 0.1s ease-out;
+        position: relative; overflow: hidden; height: 100%; text-align: center;
+        backdrop-filter: blur(10px);
+    }
+    .interactive-card i { font-size: 2.5rem; color: var(--neon); }
+    .interactive-card h4 { font-weight: 800; margin: 15px 0; color: white; }
+    .interactive-card p { color: #888; font-size: 0.95rem; line-height: 1.5; }
+    
+    .card-glow {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0,212,255,0.15) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+    
+    @media (max-width: 768px) {
+        .main-title { font-size: 3rem; }
+        .cyber-btn-outline { margin-top: 15px; margin-left: 0 !important; width: 100%; }
+        .cyber-btn-fill { width: 100%; }
+    }
+</style>
+
+<script>
+    function tilt(e, card) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rotateX = (y - rect.height / 2) / 10;
+        const rotateY = (rect.width / 2 - x) / 10;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        card.style.setProperty('--x', `${x}px`);
+        card.style.setProperty('--y', `${y}px`);
+    }
+
+    function resetTilt(card) {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+    }
+</script>
+
+{% endblock %}
