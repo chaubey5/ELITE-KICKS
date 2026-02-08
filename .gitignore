@@ -55,3 +55,8 @@ coverage.xml
 
 .vercel
 .env*.local
+
+staticfiles/
+media/
+db.sqlite3
+
