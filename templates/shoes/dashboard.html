@@ -1,81 +1,42 @@
 {% extends 'shoes/base.html' %}
 {% block content %}
-
-<style>
-    .stat-card { border: none; border-radius: 12px; transition: transform 0.3s; }
-    .stat-card:hover { transform: translateY(-5px); }
-    .bg-gradient-blue { background: linear-gradient(45deg, #4e73df, #224abe); }
-    .bg-gradient-green { background: linear-gradient(45deg, #1cc88a, #13855c); }
-    .bg-gradient-orange { background: linear-gradient(45deg, #f6c23e, #dda20a); }
-    .bg-gradient-red { background: linear-gradient(45deg, #e74a3b, #be2617); }
-    .table-card { border-radius: 15px; border: none; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-</style>
-
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 bg-light">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Super Admin Insights</h2>
-        <a href="{% url 'add_product_custom' %}" class="btn btn-dark px-4 shadow-sm">+ Add New Shoe</a>
+        <h2 class="fw-bold text-dark">Admin Power Panel</h2>
+        <a href="{% url 'add_product_custom' %}" class="btn btn-dark">+ Add New Stock</a>
     </div>
 
-    <div class="row g-4 mb-5">
-        <div class="col-md-3">
-            <div class="card stat-card bg-gradient-blue text-white p-3 shadow">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <small class="text-white-50">Total Revenue</small>
-                        <h3 class="fw-bold mb-0">${{ total_revenue }}</h3>
-                    </div>
-                    <i class="fas fa-dollar-sign fa-2x text-white-50"></i>
-                </div>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0 bg-primary text-white">
+                <small>Total Products</small>
+                <h2 class="fw-bold">{{ total_products }}</h2>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stat-card bg-gradient-green text-white p-3 shadow">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <small class="text-white-50">Total Orders</small>
-                        <h3 class="fw-bold mb-0">{{ total_orders }}</h3>
-                    </div>
-                    <i class="fas fa-shopping-cart fa-2x text-white-50"></i>
-                </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0 bg-success text-white">
+                <small>Total Revenue</small>
+                <h2 class="fw-bold">${{ total_revenue }}</h2>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stat-card bg-gradient-orange text-white p-3 shadow">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <small class="text-white-50">Total Users</small>
-                        <h3 class="fw-bold mb-0">{{ total_users }}</h3>
-                    </div>
-                    <i class="fas fa-users fa-2x text-white-50"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card stat-card bg-gradient-red text-white p-3 shadow">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <small class="text-white-50">Total Products</small>
-                        <h3 class="fw-bold mb-0">{{ total_products }}</h3>
-                    </div>
-                    <i class="fas fa-boxes fa-2x text-white-50"></i>
-                </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0 bg-dark text-white">
+                <small>Active Orders</small>
+                <h2 class="fw-bold">{{ total_orders }}</h2>
             </div>
         </div>
     </div>
 
-    
-
-    <div class="card table-card p-4">
-        <h5 class="fw-bold mb-4">Product Inventory Control</h5>
+    <div class="card shadow-sm border-0 p-4">
+        <h5 class="fw-bold mb-3">Inventory Controls</h5>
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>Product Name</th>
-                        <th>Price</th>
-                        <th>Stock Status</th>
-                        <th class="text-center">Manage</th>
+                        <th>Shoe Name</th>
+                        <th>Price Update</th>
+                        <th>Stock</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,25 +44,19 @@
                     <tr>
                         <td class="fw-bold">{{ shoe.name }}</td>
                         <td>
-                            <form action="{% url 'update_price' shoe.id %}" method="POST" class="d-flex" style="width: 140px;">
+                            <form action="{% url 'update_price' shoe.id %}" method="POST" class="d-flex w-75">
                                 {% csrf_token %}
-                                <input type="number" name="new_price" value="{{ shoe.price }}" class="form-control form-control-sm">
-                                <button class="btn btn-sm btn-outline-success ms-1"><i class="fas fa-check"></i></button>
+                                <input type="number" name="new_price" value="{{ shoe.price }}" class="form-control form-control-sm me-1">
+                                <button class="btn btn-sm btn-success">Set</button>
                             </form>
                         </td>
                         <td>
-                            <a href="{% url 'toggle_stock' shoe.id %}" class="text-decoration-none">
-                                {% if shoe.is_available %}
-                                    <span class="badge bg-success-soft text-success border border-success px-3">Available</span>
-                                {% else %}
-                                    <span class="badge bg-danger-soft text-danger border border-danger px-3">Sold Out</span>
-                                {% endif %}
+                            <a href="{% url 'toggle_stock' shoe.id %}" class="badge {% if shoe.is_available %}bg-success{% else %}bg-danger{% endif %} text-decoration-none">
+                                {% if shoe.is_available %}Active{% else %}Sold Out{% endif %}
                             </a>
                         </td>
-                        <td class="text-center">
-                            <a href="{% url 'delete_product' shoe.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this product?')">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                        <td>
+                            <a href="{% url 'delete_product' shoe.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete karein?')">Delete</a>
                         </td>
                     </tr>
                     {% endfor %}

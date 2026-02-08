@@ -8,7 +8,12 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
+
+
 """
+
+import pymysql
+pymysql.install_as_MySQLdb()
 
 from pathlib import Path
 import os
@@ -43,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -79,10 +85,10 @@ WSGI_APPLICATION = 'shoe_store.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'shoe_db',   # Ye wahi hona chahiye jo create kiya hai
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',  # agar local MySQL use kar rahe ho toh
+        'NAME': 'bcfkeh2qpntsnemnjozb',   # Ye wahi hona chahiye jo create kiya hai
+        'USER': 'u19w2dqe8fu5db1k',
+        'PASSWORD': 'TKsdbGfYIiuNJUdBQnrc',
+        'HOST': 'bcfkeh2qpntsnemnjozb-mysql.services.clever-cloud.com',  # agar local MySQL use kar rahe ho toh
         'PORT': '3306',
     }
 }
@@ -126,13 +132,15 @@ USE_TZ = True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
@@ -149,6 +157,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = ['.vercel.app', 'now.sh', 'localhost', '127.0.0.1']
 
 
 

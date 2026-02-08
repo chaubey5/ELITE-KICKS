@@ -141,16 +141,30 @@ def admin_dashboard(request):
 @user_passes_test(admin_check, login_url='login')
 def add_product_custom(request):
     if request.method == 'POST':
+        # Data variables mein le lo taaki debugging asan ho
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        desc = request.POST.get('description')
+        brand_id = request.POST.get('brand')
+        category_id = request.POST.get('category') # <--- Ye line add karein
+        img = request.FILES.get('image')
+
         Shoe.objects.create(
-            name=request.POST.get('name'),
-            price=request.POST.get('price'),
-            description=request.POST.get('description'),
-            brand_id=request.POST.get('brand'),
-            image=request.FILES.get('image'),
+            name=name,
+            price=price,
+            description=desc,
+            brand_id=brand_id,
+            category_id=category_id, # <--- Ye line bhi add karein
+            image=img,
             is_available=True
         )
         return redirect('admin_dashboard')
-    return render(request, 'shoes/add_product_custom.html', {'brands': Brand.objects.all()})
+
+    # Template mein categories bhi bhejein taaki dropdown dikhe
+    return render(request, 'shoes/add_product_custom.html', {
+        'brands': Brand.objects.all(),
+        'categories': Category.objects.all() # <--- Ye zaroori hai
+    })
 
 @user_passes_test(admin_check, login_url='login')
 def update_price(request, shoe_id):

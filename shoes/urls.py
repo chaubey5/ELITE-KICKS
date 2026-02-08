@@ -37,4 +37,5 @@ urlpatterns = [
     path('update-price/<int:shoe_id>/', views.update_price, name='update_price'),
     path('toggle-stock/<int:shoe_id>/', views.toggle_stock, name='toggle_stock'),
     path('delete-product/<int:shoe_id>/', views.delete_product, name='delete_product'),
+    path('dashboard/delete/<int:shoe_id>/', views.delete_product, name='delete_product'),
 ]

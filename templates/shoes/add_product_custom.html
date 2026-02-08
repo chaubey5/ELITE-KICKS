@@ -19,15 +19,25 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold">Price ($)</label>
-                        <input type="number" name="price" class="form-control" placeholder="0.00" required>
+                        <input type="number" name="price" step="0.01" class="form-control" placeholder="0.00" required>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold">Brand</label>
-                        <select name="brand" class="form-select">
+                        <select name="brand" class="form-select" required>
+                            <option value="">Select Brand</option>
                             {% for brand in brands %}
                             <option value="{{ brand.id }}">{{ brand.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Category</label>
+                        <select name="category" class="form-select" required>
+                            <option value="">Select Category</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}">{{ cat.name }}</option>
                             {% endfor %}
                         </select>
                     </div>

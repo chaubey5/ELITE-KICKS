@@ -17,6 +17,7 @@
     .bg-danger-soft { background-color: #fceaea; color: #dc3545; }
     
     .customer-img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .btn-action { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; transition: 0.2s; }
 </style>
 
 <div class="container-fluid py-4">
@@ -78,7 +79,7 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-7">
+        <div class="col-lg-6">
             <div class="card table-card p-4">
                 <h5 class="fw-bold mb-4 text-dark"><i class="fas fa-history me-2 text-primary"></i>Recent Orders</h5>
                 <div class="table-responsive">
@@ -116,16 +117,17 @@
             </div>
         </div>
 
-        <div class="col-lg-5">
+        <div class="col-lg-6">
             <div class="card table-card p-4">
-                <h5 class="fw-bold mb-4 text-dark"><i class="fas fa-tools me-2 text-warning"></i>Inventory Control</h5>
+                <h5 class="fw-bold mb-4 text-dark"><i class="fas fa-tools me-2 text-warning"></i>Inventory & Actions</h5>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead class="table-light text-muted small text-uppercase">
                             <tr>
                                 <th>Product</th>
-                                <th>Price</th>
-                                <th>Stock</th>
+                                <th>Price Update</th>
+                                <th>Status</th>
+                                <th class="text-center">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -133,19 +135,26 @@
                             <tr>
                                 <td class="fw-bold small">{{ shoe.name }}</td>
                                 <td>
-                                    <form action="{% url 'update_price' shoe.id %}" method="POST" class="d-flex" style="width: 100px;">
+                                    <form action="{% url 'update_price' shoe.id %}" method="POST" class="d-flex align-items-center" style="max-width: 120px;">
                                         {% csrf_token %}
-                                        <input type="number" name="new_price" value="{{ shoe.price }}" class="form-control form-control-sm">
-                                        <button class="btn btn-sm btn-success ms-1"><i class="fas fa-check"></i></button>
+                                        <input type="number" name="new_price" value="{{ shoe.price }}" class="form-control form-control-sm px-1" style="font-size: 12px;">
+                                        <button class="btn btn-sm btn-success ms-1"><i class="fas fa-check fa-xs"></i></button>
                                     </form>
                                 </td>
                                 <td>
                                     <a href="{% url 'toggle_stock' shoe.id %}" class="text-decoration-none">
                                         {% if shoe.is_available %}
-                                            <span class="badge bg-success-soft">In Stock</span>
+                                            <span class="badge-soft bg-success-soft small">In Stock</span>
                                         {% else %}
-                                            <span class="badge bg-danger-soft">Out</span>
+                                            <span class="badge-soft bg-danger-soft small">Out</span>
                                         {% endif %}
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{% url 'delete_product' shoe.id %}" 
+                                       class="btn btn-outline-danger btn-sm border-0" 
+                                       onclick="return confirm('Bhai, kya sach mein isse delete karna hai?')">
+                                        <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
                             </tr>

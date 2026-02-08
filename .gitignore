@@ -53,3 +53,5 @@ coverage.xml
 
 
 
+.vercel
+.env*.local
