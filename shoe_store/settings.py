@@ -2,15 +2,20 @@ import os
 from pathlib import Path
 import pymysql
 
+# MySQL version bypass for Vercel
+pymysql.version_info = (2, 2, 7, "final", 0)
 pymysql.install_as_MySQLdb()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+# Yahan hardcoded SECRET_KEY daal raha hoon taaki crash na ho
+SECRET_KEY = 'django-insecure-your-secret-key-here'
 
-DEBUG = os.environ.get("DEBUG") == "True"
+# DEBUG ko True rakho taaki error dikhe
+DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+# 400 Error se bachne ke liye '*'
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,7 +29,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Static files ke liye
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -54,6 +59,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shoe_store.wsgi.application'
 
+# Database details as per your image
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -63,7 +69,7 @@ DATABASES = {
         'HOST': 'bcfkeh2qpntsnemnjozb-mysql.services.clever-cloud.com',
         'PORT': '3306',
         'OPTIONS': {
-            'ssl': {'ca': None},
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
 }
@@ -76,27 +82,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
 USE_TZ = True
 
+# Static Files Config
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# Whitenoise for Vercel
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Media Files Config (For Shoe Images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
